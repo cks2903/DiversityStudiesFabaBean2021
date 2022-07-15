@@ -1,0 +1,63 @@
+#Running OHANA to derive population structure and markers under selection
+
+				
+
+
+
+
+######################################################
+######################################################
+# Step 1. Structure inference with qpas
+
+######################################################
+######################################################
+conda activate plink
+
+srun  -A norfab --pty /bin/bash
+
+# prepare data with plink
+plink --file /home/cks/norfab/faststorage/cks/20220120_DiversityPanel/20220126_DiversityPanel/PCA/genotypes --recode12 --geno 0.0 -maf 0.01 --tab --allow-extra-chr
+
+# Convert .ped file to .dmg file
+conda activate ohana
+convert ped2dgm plink.ped g.dgm
+
+# run qpas, with k=3
+qpas g.dgm -k 3 -qo q.matrix -fo f.matrix -mi 5
+
+#The -fo output file records the allele frequency inference, which can be used to estimate component covariances with nemeco.
+
+######################################################
+######################################################
+# Step 2. NEMECO, makes the covariance matrix
+######################################################
+######################################################
+
+
+nemeco g.dgm f.matrix -co c.matrix -mi 5 
+#The -fo output file records the allele frequency inference, which can be used to estimate component covariances with nemeco.
+
+
+######################################################
+######################################################
+# Step 3. Make admixture corrected allele frequencies 
+######################################################
+######################################################
+
+qpas g.dgm -k 3 -qi q.matrix -fo f.matrix -mi 5 -fq
+# the -qo file is a file recording the admixture inference
+
+
+######################################################
+######################################################
+# Step 4. Selscan
+######################################################
+######################################################
+selscan g.dgm f.matrix c.matrix > sel_K3.txt
+
+#The standard output from selscan contains four columns, 
+#the scalar value when local best likelihood is reached,
+#the local log likelihood obeying global covariances,
+# the local optimal log likelihood, and the likelihoods ratio of this locus. 
+#The total number and order of loci match with the input genotype data.
+
