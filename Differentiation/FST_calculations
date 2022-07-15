@@ -1,0 +1,15 @@
+#VCFtools can also calculate Fst statistics between individuals of different populations. 
+#It is an estimate calculated in accordance to Weir and Cockerham’s 1984 paper. 
+#The user must supply text files that contain lists of individuals (one per line) that are members of each population. 
+#The function will work with multiple populations if multiple --weir-fst-pop arguments are used. 
+
+
+
+#Pop1 vs. pop2 only considering inividuals with membership >0.50
+vcftools --vcf genotypes_DiversityPanel_20220315_MAFfiltered.recode.vcf --weir-fst-pop population_1_50perc.txt --weir-fst-pop population_2_50perc.txt --out pop1_vs_pop2_50perc
+
+#Pop1 vs. pop3 only considering inividuals with membership >0.50
+vcftools --vcf genotypes_DiversityPanel_20220315_MAFfiltered.recode.vcf --weir-fst-pop population_1_50perc.txt --weir-fst-pop population_3_50perc.txt --out pop1_vs_pop3_50perc
+
+#Pop2 vs. pop3 only considering inividuals with membership >0.50
+vcftools --vcf genotypes_DiversityPanel_20220315_MAFfiltered.recode.vcf --weir-fst-pop population_2_50perc.txt --weir-fst-pop population_3_50perc.txt --out pop2_vs_pop3_50perc
