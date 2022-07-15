@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -A norfab
+#SBATCH -c 60
+#SBATCH -t 72:00:00
+#SBATCH --mem=500g
+
+
+bayescan_2.1 -snp -all_trace -threads 60 BayeScan_input.txt
