@@ -74,7 +74,6 @@ d<-c + xlab(paste0("PC1 (", signif(pve$pve[1], 3), "%)")) + ylab(paste0("PC2 (",
 ggsave("PC1PC2_3subpops_colouredByOrigin.png", plot = d, width = 20, height = 15, unit = 'cm')
 
 
-
 e <- ggplot(merged, aes(PC2, PC3, col =POP )) + geom_point(size = 1)
 #e <- e +   scale_colour_manual(values = c("#0D2C54","#00AF54","#C6878F")) 
 e <- e + coord_equal() + theme_classic()  + xlim(min,max) +ylim(min,max) +scale_color_manual(values = c("#440154","#fde725","#21918c")) 
@@ -88,5 +87,22 @@ c <- c + coord_equal() + theme_classic() + xlim(min,max) +ylim(min,max) +scale_c
 d<-c + xlab(paste0("PC2 (", signif(pve$pve[2], 3), "%)")) + ylab(paste0("PC3 (", signif(pve$pve[3], 3), "%)"))
 ggsave("PC2PC3_3subpops_colouredByOrigin.png", plot = d, width = 20, height = 15, unit = 'cm')
 
+pca_alt <- as.tibble(data.frame(pca, as.character(SubpopInfo$POP),SubpopInfo_merged$SP3A))
+
+for (i in seq(1:nrow(pca_alt))){
+  if (pca_alt$SubpopInfo_merged.SP3A[i]=="x"){
+    pca_alt$as.character.SubpopInfo.POP.[i]="Subpop3A"
+  }
+}
+
+pca_alt$SubpopInfo_merged.OriginLessBroad[is.na(pca_alt$SubpopInfo_merged.OriginLessBroad)]="No origin"
+c <- ggplot(pca_alt, aes(PC1, PC2, col =as.character.SubpopInfo.POP.,shape = SubpopInfo_merged.OriginLessBroad)) + geom_point(size = 3)
+#c <- c +   scale_colour_manual(values = c("#0D2C54","#00AF54","#C6878F")) 
+c <- c + coord_equal() + theme_classic() + xlim(min,max) +ylim(min,max) +scale_color_manual(values = c("#440154","#fde725","#21918c","green")) +  scale_shape_manual(values = c(0, 2,5,4,1))
+d<-c + xlab(paste0("PC1 (", signif(pve$pve[1], 3), "%)")) + ylab(paste0("PC2 (", signif(pve$pve[2], 3), "%)"))
+ggsave("PC1PC2_3subpops_colouredByOrigin_SP3distinction.pdf", plot = d, width = 20, height = 15, unit = 'cm')
+ggsave("PC1PC2_3subpops_colouredByOrigin_SP3distinction.png", plot = d, width = 20, height = 15, unit = 'cm')
 
 
+
+ggsave("PC1PC2_3subpops_colouredByOrigin_SP3distinction.png", plot = d, width = 20, height = 15, unit = 'cm')
