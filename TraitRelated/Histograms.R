@@ -373,14 +373,21 @@ df_filt2$Score = as.numeric(as.character(df_filt2$Score))
 # plant heigher than 3 m and less than 0.5 m
 remove1 <- which(df_filt2$PDID==14 & (df_filt2$Score>300 | df_filt2$Score<50 )) 
 
-# plants that flower for more than 100 days 
-remove2 <- which(df_filt2$PDID==47 & df_filt2$Score>100)
+# plants that flower for more than 100 days or 0 days 
+remove2 <- which((df_filt2$PDID==47 & df_filt2$Score>100) | (df_filt2$PDID==47 & df_filt2$Score==0))
+
+# Seed circularity > 4
+remove3 <- which(df_filt2$PDID==23 & df_filt2$Score>4)
 
 # negative date of end flowering
 remove4 <- which(df_filt2$PDID==18 & df_filt2$Score<0)
 
 # earliness of flowering >100
 remove5 <- which(df_filt2$PDID==17 & df_filt2$Score>100)
+
+# end of flowering that corresponds to duration of 0
+ProblemPlots_EndOfFlow <- df_filt2$PLID[which(df_filt2$PDID==47 & df_filt2$Score==0)]
+remove5.5 <- which(df_filt2$PDID==18 & df_filt2$PLID %in% ProblemPlots_EndOfFlow)
 
 # maturation date >100
 remove6 <- which(df_filt2$PDID==16 & df_filt2$Score>100)
@@ -398,7 +405,7 @@ remove7.6 <- which(df_filt2$PDID==29 & df_filt2$TRID==28.2  & df_filt2$Score>50)
 
 
 
-remove_point =c(remove1,remove2,remove4,remove5,remove6,remove7,remove7.5,remove7.6) 
+remove_point =c(remove1,remove2,remove4,remove5,remove5.5,remove6,remove7,remove7.5,remove7.6) 
 
 df_filt3 <- df_filt2[-remove_point,] 
 
